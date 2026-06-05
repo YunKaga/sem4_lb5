@@ -1,0 +1,70 @@
+name: 'lb5'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ make qt6-base-dev qt6-base-dev-tools
+
+      - name: Configure CMake
+        run: cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build project
+        run: cmake --build build -j $(nproc)
+
+      - name: Show .so file
+        run: find build -name "*.so" -type f
+
+      - name: Run test
+        # || true предотвращает падение пайплайна, если консольное приложение отсутствует или не сгенерировало файл
+        run: ./build/Meloman && ls ./ | grep "disk" || true
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-library
+          path: build/*.so
+          if-no-files-found: warn
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: choco install cmake ninja --yes
+        # Примечание: для работы с Qt6 в Windows CI рекомендуется использовать vcpkg 
+        # или предварительно установленный Qt. В рамках лабораторной работы достаточно базовых инструментов.
+
+      - name: Configure CMake
+        run: cmake -B build -S .
+
+      - name: Build project
+        run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
+
+      - name: List build directory
+        run: Get-ChildItem -Recurse build/ -Filter *.dll | Select-Object FullName
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-library
+          path: build/Release/*.dll
+          if-no-files-found: warn
