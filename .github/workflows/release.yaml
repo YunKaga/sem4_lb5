@@ -39,32 +39,3 @@ jobs:
           name: linux-library
           path: build/*.so
           if-no-files-found: warn
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-      - name: Install dependencies
-        run: choco install cmake ninja --yes
-        # Примечание: для работы с Qt6 в Windows CI рекомендуется использовать vcpkg 
-        # или предварительно установленный Qt. В рамках лабораторной работы достаточно базовых инструментов.
-
-      - name: Configure CMake
-        run: cmake -B build -S .
-
-      - name: Build project
-        run: cmake --build build --config Release -j $env:NUMBER_OF_PROCESSORS
-
-      - name: List build directory
-        run: Get-ChildItem -Recurse build/ -Filter *.dll | Select-Object FullName
-
-      - name: Upload Windows artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-library
-          path: build/Release/*.dll
-          if-no-files-found: warn

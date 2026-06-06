@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     // 1. Создаём диск (логика)
     disk = std::make_unique<MusicDisk>("My Collection", 80);
 
-    // 2. Инициализация через фабрики (требование 4)
     initDefaultData();
 
     setupLayout();
@@ -25,8 +24,8 @@ void MainWindow::initDefaultData() {
     InstrumentalFactory instFactory;
 
     // Добавляем начальные треки (длительность в секундах)
-    disk->AddTrack(songFactory.CreateSong("Bohemian Rhapsody", 354, "Queen", "Rock", "Freddie Mercury", true));
-    disk->AddTrack(instFactory.CreateInstrumental("Canon in D", 360, "Pachelbel", "Classical", "Violin", true));
+    disk->AddTrack(songFactory.CreateSong("Bohemian Rhapsody", 354.56, "Queen", "Rock", "Freddie Mercury", true));
+    disk->AddTrack(instFactory.CreateInstrumental("Canon in D", 360.13, "Pachelbel", "Classical", "Violin", true));
 }
 
 void MainWindow::setupLayout() {
@@ -60,7 +59,6 @@ void MainWindow::setupLayout() {
     connect(btnDelete, &QPushButton::clicked, this, &MainWindow::onDelete);
 }
 
-// === ИСПРАВЛЕННАЯ ФУНКЦИЯ ===
 void MainWindow::refreshUI() {
     cbTracks->clear();
     

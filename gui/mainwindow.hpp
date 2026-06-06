@@ -9,7 +9,7 @@
 #include <QLabel>
 #include <memory>
 
-class MusicDisk; // Из вашей DLL
+class MusicDisk;
 
 class MainWindow : public QWidget {
     Q_OBJECT
@@ -25,7 +25,7 @@ private slots:
 
 private:
     void setupLayout();
-    void initDefaultData(); // Инициализация через фабрики (требование ЛР №5)
+    void initDefaultData(); // Инициализация через фабрики
 
     std::unique_ptr<MusicDisk> disk;
     QComboBox* cbTracks;

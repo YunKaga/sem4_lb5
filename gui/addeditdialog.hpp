@@ -16,7 +16,7 @@ class MusicalComposition; // Из DLL
 class AddEditDialog : public QDialog {
     Q_OBJECT
 public:
-    // Конструктор 1: для добавления нового объекта (требование 5)
+    // Конструктор 1: для добавления нового объекта
     explicit AddEditDialog(QWidget *parent = nullptr);
     // Конструктор 2: для редактирования существующего
     explicit AddEditDialog(const MusicalComposition& comp, QWidget *parent = nullptr);
